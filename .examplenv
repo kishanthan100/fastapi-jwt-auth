@@ -1,0 +1,5 @@
+POSTGRES_DB=<database nmae>
+POSTGRES_USER=<database user>
+POSTGRES_PASSWORD=<database password>
+POSTGRES_HOST=<host>
+

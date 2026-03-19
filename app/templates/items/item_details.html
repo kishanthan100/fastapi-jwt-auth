@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Item Details{% endblock %}
+
+{% block header_title %}Item Details{% endblock %}
+
+
+    {% block extra_styles %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4fdf4;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2e7d32;
+        }
+
+        .details {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .details p {
+            margin: 10px 0;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+    {% endblock %}
+{% block content %}
+
+    <div class="details">
+        <p><strong>Image</strong></p>
+        <img src="{{ item.img_url }}" alt="Item image" />
+        <p><strong>ID:</strong> {{ item.id }}</p>
+        <p><strong>Name:</strong> {{ item.item_name }}</p>
+        <p><strong>Category:</strong> {{ item.category }}</p>
+        <p><strong>Territory:</strong> {{ item.territory }}</p>
+        
+        <!-- Add other fields as needed -->
+    </div>
+
+    <a href="/items/dashboard">Back to Dashboard</a>
+{% endblock %}

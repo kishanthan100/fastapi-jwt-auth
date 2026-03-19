@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9); /* soft green gradient */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
+            width: 360px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #2e7d32; /* deep natural green */
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #a5d6a7;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #2e7d32;
+            outline: none;
+        }
+
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper input {
+            flex: 1;
+            padding-right: 40px;
+            box-sizing: border-box;
+        }
+
+        .toggle-eye {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 14px;
+            color: #2e7d32;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2e7d32;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 16px;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transition: background 0.3s, opacity 0.3s;
+        }
+
+        button.enabled {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        button.enabled:hover {
+            background: #1b5e20;
+        }
+
+        .login-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .login-link a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        {% if error %}
+        <div style="color: #2e7d32;">
+            {{ error }}
+        </div>
+        {% endif %}
+        <h2>Register</h2>
+        <form id="registerForm" action="/register-form" method="post">
+            <label>Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label>Email:</label>
+            <input type="email" id="email" name="email" maxlength="72" placeholder="example@gmail.com" required>
+
+            <label>Password:</label>
+            <div class="password-wrapper">
+                <input type="password" id="password" name="password" required>
+                <span class="toggle-eye" onclick="togglePassword()">👁</span>
+            </div>
+
+            <label>NIC:</label>
+            <input type="text" name="nic">
+
+            <label>Address:</label>
+            <textarea name="address" rows="3"></textarea>
+
+            <label>Phone Number:</label>
+            <input type="tel" name="phone">
+
+            <button type="submit" id="submitBtn">Register</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="/">Login</a>
+        </div>
+    </div>
+
+    <script>
+        const nameField = document.getElementById('name');
+        const emailField = document.getElementById('email');
+        const passwordField = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function validateForm() {
+            const nameValid = nameField.value.trim() !== "";
+            const emailValid = emailField.validity.valid;
+            const passwordValid = passwordField.value.trim() !== "";
+
+            if (nameValid && emailValid && passwordValid) {
+                submitBtn.classList.add("enabled");
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.classList.remove("enabled");
+                submitBtn.disabled = true;
+            }
+        }
+
+        function togglePassword() {
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        }
+
+        nameField.addEventListener('input', validateForm);
+        emailField.addEventListener('input', validateForm);
+        passwordField.addEventListener('input', validateForm);
+
+        validateForm();
+    </script>
+</body>
+</html>

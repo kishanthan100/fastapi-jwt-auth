@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block header_title %}Items Dashboard
+{% if user %}
+            <span>{{ user.email }}</span>
+        {% endif %}
+{% endblock %}
+
+
+    {% block extra_styles %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #aec6ae; /* soft white-green background */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2e7d32; /* deep green */
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: #2e7d32; /* green header */
+            color: #fff;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #e8f5e9; /* light green alternate rows */
+        }
+
+        tbody tr:hover {
+            background: #c8e6c9; /* highlight on hover */
+        }
+
+        th {
+            font-weight: bold;
+        }
+    </style>
+    {% endblock %}
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Territory</th>
+                <!-- add more columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td><a href="/items/item_details/{{ item.id }}">{{ item.id }}</a></td>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.territory }}</td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     <div>
+        
+        
+    </div>
+{% endblock %}
