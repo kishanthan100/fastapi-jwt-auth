@@ -12,8 +12,8 @@
 
         /* Left side - Login */
         .login-section {
-            flex: 1;
-            background: #879287;
+            flex: 2;
+            background: #1f201f;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,14 +24,14 @@
             width: 320px;
             padding: 30px;
             border-radius: 10px;
-            background: #f9f9f9;
+            background: #494949;
             box-shadow: 0px 4px 15px rgba(0,0,0,0.15);
             text-align: center;
         }
 
         h2 {
             margin-bottom: 20px;
-            color: #2e7d32; /* Natural green */
+            color: #f3f4f3; /* Natural green */
         }
 
         label {
@@ -39,14 +39,14 @@
             text-align: left;
             margin: 10px 0 5px;
             font-weight: bold;
-            color: #333;
+            color: #ffffff;
         }
 
         input {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #ccc;
+            border: 1px solid #ffffff;
             border-radius: 5px;
             transition: border-color 0.3s;
         }
@@ -75,7 +75,7 @@
         .register-link {
             margin-top: 15px;
             font-size: 14px;
-            color: #555;
+            color: #fdfdfd;
         }
 
         .register-link a {
@@ -90,45 +90,31 @@
 
         /* Right side - Thoughts/Company Info */
         .thoughts-section {
-            flex: 1;
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            flex: 3;
+            background: linear-gradient(135deg, #1c1c1c, #494f4a);
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 40px;
-            color: #2e7d32;
+            
             text-align: center;
         }
 
-        .thoughts-section h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
+       
 
         .thoughts-section p {
             font-size: 16px;
             line-height: 1.6;
-            max-width: 400px;
+            max-width: 80%;
+            padding: 10px;
         }
 
-        .client-experience {
-            margin-top: 30px;
-            padding: 20px;
-            background: #ffffffcc; /* soft white overlay */
-            border-left: 4px solid #2e7d32; /* natural green accent */
-            border-radius: 8px;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .client-experience h2 {
-            color: #2e7d32;
-            margin-bottom: 10px;
-        }
+        
 
         .client-experience p {
-            font-size: 15px;
+            font-size: 30px;
             line-height: 1.5;
-            color: #333;
+            color: #ffffff;
         }
 
     </style>
@@ -144,6 +130,11 @@
 
                 <label>Password:</label>
                 <input type="password"  id="password" name="password" required>
+                {% if error %}
+                <div id="error-message"  style="color: #e86c6c;">
+                    {{ error }}
+                </div>
+                {% endif %}
 
                 <button type="submit" id="loginBtn" disabled>Login</button>
             </form>
@@ -156,18 +147,9 @@
 
     <!-- Right: Thoughts -->
     <div class="thoughts-section">
-    <div>
-        <h1>Thamizhi Data Solution</h1>
-        <p>
-            At Thamizhi Data Solution, we believe in the power of knowledge, 
-            innovation, and natural growth. Our mission is to transform data 
-            into meaningful insights, helping businesses thrive while staying 
-            true to values of sustainability and trust.
-        </p>
-
-        <!-- Client Experience Section -->
+    <div>        <!-- Client Experience Section -->
         <div class="client-experience">
-            <h2>Our Clients Speak</h2>
+
             <p>
                 "Working with Thamizhi Data Solution has been a transformative 
                 experience. Their insights and dedication helped us unlock new 
@@ -196,5 +178,12 @@
 
     emailInput.addEventListener("input", toggleButton);
     passwordInput.addEventListener("input", toggleButton);
+
+    setTimeout(function () {
+        const errorBox = document.getElementById("error-message");
+        if (errorBox) {
+            errorBox.style.display = "none";
+        }
+    }, 4000); // 4000 ms = 4 seconds
 </script>
 </html>

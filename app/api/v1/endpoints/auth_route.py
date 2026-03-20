@@ -5,7 +5,7 @@ from app.core.database import SessionLocal
 from app.schemas.auth_schema import LoginRequest
 from app.services.auth_service import register_service, login_from_userdetailstable
 from app.core.templates import templates
-from app.core.security import create_access_token
+from app.core.security import create_access_token, create_refresh_token
 
 router = APIRouter()
 
@@ -22,6 +22,37 @@ def login_page(request: Request):
 
 
 
+# @router.post("/login-form")
+# def login_form(
+#     request: Request,
+#     email: str = Form(...),
+#     password: str = Form(...),
+#     db: Session = Depends(get_db)
+# ):
+#     user = login_from_userdetailstable(db, email,password)
+
+#     if not user:
+#         return templates.TemplateResponse(
+#             "login.html",
+#             {"request": request, "error": "Invalid credentials"}
+#         )
+
+#     token = create_access_token({"sub": str(user.id),"email": user.email})
+
+#     response = RedirectResponse(url="/items/dashboard", status_code=303)
+
+#     # ✅ STORE TOKEN IN COOKIE
+#     response.set_cookie(
+#         key="access_token",
+#         value=token,
+#         httponly=True,
+#         secure=False,   # True in production (HTTPS)
+#         samesite="lax"
+#     )
+
+#     return response
+
+
 @router.post("/login-form")
 def login_form(
     request: Request,
@@ -29,24 +60,43 @@ def login_form(
     password: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    user = login_from_userdetailstable(db, email,password)
+    user = login_from_userdetailstable(db, email, password)
 
     if not user:
         return templates.TemplateResponse(
             "login.html",
-            {"request": request, "error": "Invalid credentials"}
+            {"request": request, "error": "Invalid credentials"},
+            status_code=401
         )
 
-    token = create_access_token({"sub": str(user.id),"email": user.email})
+    # 🔥 create BOTH tokens
+    access_token = create_access_token({
+        "sub": str(user.id),
+        "email": user.email
+    })
+
+    refresh_token = create_refresh_token({
+        "sub": str(user.id),
+        "email": user.email
+    })
 
     response = RedirectResponse(url="/items/dashboard", status_code=303)
 
-    # ✅ STORE TOKEN IN COOKIE
+    # ✅ access token (short-lived)
     response.set_cookie(
         key="access_token",
-        value=token,
+        value=access_token,
         httponly=True,
-        secure=False,   # True in production (HTTPS)
+        secure=False,   # True in production
+        samesite="lax"
+    )
+
+    # 🔥 refresh token (long-lived)
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=False,
         samesite="lax"
     )
 
@@ -100,8 +150,18 @@ def register_form(
 
 
 
+# @router.get("/logout")
+# def logout():
+#     response = RedirectResponse(url="/", status_code=303)
+#     response.delete_cookie("access_token")  # ✅ remove token
+#     return response
+
+
 @router.get("/logout")
 def logout():
     response = RedirectResponse(url="/", status_code=303)
-    response.delete_cookie("access_token")  # ✅ remove token
+
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")  # 🔥 MUST
+
     return response

@@ -27,15 +27,24 @@ def read_items(db: Session = Depends(get_db)):
     return fetch_items(db)
 
 
-# @router.get("/dashboard")
-# def dashboard(request: Request, db:Session = Depends(get_db)):
-#     items = fetch_items(db)
-#     return templates.TemplateResponse("items/dashboard.html", 
-#                                       {"request": request,
-#                                        "items": items
-#                                        }
-#                                     )
 
+
+
+# @router.get("/dashboard")
+# def dashboard(
+#     request: Request,
+#     db: Session = Depends(get_db),
+#     current_user: dict = Depends(get_current_user)):
+#     items = fetch_items(db)
+
+#     return templates.TemplateResponse(
+#         "items/dashboard.html",
+#         {
+#             "request": request,
+#             "items": items,
+#             "user": current_user
+#         }
+#     )
 
 
 
@@ -43,10 +52,11 @@ def read_items(db: Session = Depends(get_db)):
 def dashboard(
     request: Request,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user)):
+    current_user: dict = Depends(get_current_user)
+):
     items = fetch_items(db)
 
-    return templates.TemplateResponse(
+    response = templates.TemplateResponse(
         "items/dashboard.html",
         {
             "request": request,
@@ -55,6 +65,15 @@ def dashboard(
         }
     )
 
+    # 🔥 if refreshed → update cookie
+    if hasattr(request.state, "new_access_token"):
+        response.set_cookie(
+            key="access_token",
+            value=request.state.new_access_token,
+            httponly=True
+        )
+
+    return response
 
 
 
